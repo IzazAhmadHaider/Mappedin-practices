@@ -6,11 +6,11 @@ interface WayFindingFormProps {
 
 const WayFindingForm: React.FC<WayFindingFormProps> = ({ setPoints }) => {
     const [isFormVisible, setFormVisible] = useState<boolean>(false);
-    const [inputValues, setInputValues] = useState<string[]>(['', '', '']); // Separate state to hold current input values
+    const [inputValues, setInputValues] = useState<string[]>(['', '', '']);
 
     const handleToggleForm = (): void => {
         setFormVisible((prev) => !prev);
-        setPoints([]); // Reset Points when toggling form visibility
+        setPoints([]); 
     };
 
     const handleInputChange = (index: number, value: string): void => {
@@ -22,8 +22,8 @@ const WayFindingForm: React.FC<WayFindingFormProps> = ({ setPoints }) => {
     };
 
     const handleFormSubmit = (e: React.FormEvent) => {
-        e.preventDefault(); // Prevent the default form submission behavior
-        setPoints(inputValues); // Update state with input values
+        e.preventDefault(); 
+        setPoints(inputValues); 
     };
 
     return (
@@ -33,8 +33,8 @@ const WayFindingForm: React.FC<WayFindingFormProps> = ({ setPoints }) => {
                     onClick={handleToggleForm}
                     className="absolute w-4 h-4 top-5 right-5"
                 >
-                    <span className={`w-4 h-1 rotate-45 fixed bg-[#4c4c4c] -translate-y-2.5 rounded-lg transition-all ${isFormVisible && '-translate-y-1'}`}></span>
-                    <span className={`w-4 h-1 -rotate-45 fixed bg-[#4c4c4c] rounded-lg ${isFormVisible && '-translate-y-1'}`}></span>
+                    <span className={`w-4 h-1 rotate-45 fixed bg-[#4c4c4c] -translate-y-2.5 rounded-lg transition-all ${isFormVisible && '-translate-y-1.5'}`}></span>
+                    <span className={`w-4 h-1 -rotate-45 fixed bg-[#4c4c4c] rounded-lg transition-all ${isFormVisible && '-translate-y-1.5'}`}></span>
                 </button>
                 <h2 className="text-xl font-semibold mb-4">Find Your Way</h2>
                 {isFormVisible && (

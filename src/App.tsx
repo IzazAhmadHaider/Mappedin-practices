@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Toaster } from 'react-hot-toast'; // Import toast and Toaster
-import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast'; // Import toast and Toaster
+import { useEffect, useMemo, useState } from 'react';
 import { MapView, useMapData, useMap, Label } from '@mappedin/react-sdk';
 import '@mappedin/react-sdk/lib/esm/index.css';
-import { Space, TDirectionZone } from '@mappedin/react-sdk/mappedin-js/src';
+import { Space } from '@mappedin/react-sdk/mappedin-js/src';
 import WayFindingForm from './components/WayFindingForm';
-import circle from "@turf/circle";
-import { Feature, Polygon } from "@turf/turf";
-// import { AddPathOptions } from '@mappedin/react-sdk/geojson/src/components/path';
+import { AddPathOptions } from '@mappedin/react-sdk/geojson/src';
 
 interface MyCustomComponentProps {
   Points: string[];
@@ -16,128 +14,90 @@ interface MyCustomComponentProps {
 
 const MyCustomComponent: React.FC<MyCustomComponentProps> = ({ Points }) => {
   const { mapData, mapView } = useMap();
-  // const firstSpace = Points[0] ? mapData.getByType('space').find((s) => s.name === Points[0]) : undefined;
-  // const secondSpace = Points[1] ? mapData.getByType('space').find((s) => s.name === Points[1]) : undefined;
-  // const ThirdSpace = Points[2] ? mapData.getByType('space').find((s) => s.name === Points[2]) : undefined;
+  const [isLoopCompleted, setIsLoopCompleted] = useState(false);
 
+  const [coordinatee, setCoordinatee] = useState(
+    mapView.createCoordinate(43.4868876425416, -80.5926397158061)
+  );
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // if (!firstSpace || !secondSpace) {
-  //   console.error('One or both spaces are missing.');
-  //   return;
-  // }
-  // const destinationSpaces: any = ThirdSpace ? [secondSpace, ThirdSpace] : secondSpace;
+  const coordinatesList = useMemo(() => [
+    { latitude: 43.4868876425416, longitude: -80.5926397158061, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.48688745069577, longitude: -80.59273587695812, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.4868720223463, longitude: -80.59280178883733, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.4868514134653, longitude: -80.59284167041277, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.486822136125745, longitude: -80.59293022946895, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.48680266702968, longitude: -80.5929872691173, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.48673381853413, longitude: -80.59316502385983, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.48667490818754, longitude: -80.59332729218747, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.486627919663114, longitude: -80.59347691909443, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.48653794199464, longitude: -80.59360387047947, floorid: "m_0b6f6e39aef72a58" },
+    { latitude: 43.48646225007387, longitude: -80.59344601543482, floorid: "m_0b6f6e39aef72a58" },
+  ], []);
+  
+    const firstSpace = mapData.getByType('space').find((s) => s.name === 'Library');
+    const secondSpace = mapData.getByType('space').find((s) => s.name === 'Gymnasium');
+    console.log(firstSpace?.center, 'I am First Space');
 
-  // console.log("Third Space", ThirdSpace)
+    useEffect(() => {
+      if (isLoopCompleted) return;
+      const interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => {
+          const nextIndex = (prevIndex + 1) % coordinatesList.length;
+          const nextCoordinate = coordinatesList[nextIndex];
+    
+          const newCoordinate = mapView.createCoordinate(nextCoordinate.latitude, nextCoordinate.longitude);
+          setCoordinatee(newCoordinate);
+    
+          console.log("Updated Coordinate:", newCoordinate.toJSON());
+    
+          // Check if coordinates match and trigger an alert or toast
+          if (
+            newCoordinate.latitude === firstSpace?.center.latitude && 
+            newCoordinate.longitude === firstSpace?.center.longitude   
+          ) {
+            setIsLoopCompleted(true);
+            toast.success('You Have Reached Your Destination');
+            clearInterval(interval);
+          }
+          return nextIndex;
+        });
+      }, 3000);
+    
+      return () => clearInterval(interval);
+    }, [coordinatee, mapView, firstSpace , coordinatesList]);
+    
 
-  // const directions = ThirdSpace ? mapData.getDirectionsMultiDestination(firstSpace, destinationSpaces) : mapData.getDirections(firstSpace, destinationSpaces)
-  // if (directions) {
-  //   const pathOptions1: AddPathOptions = {
-  //     color: "#FF5733",
-  //     // animateDrawing: true,
-  //     displayArrowsOnPath: true,
-  //     animateArrowsOnPath: true,
-  //     // drawDuration: 2000,
-  //   };
-  //   mapView.Navigation.draw(directions, {
-  //     pathOptions: pathOptions1,  // Use first set of path options
-  //   });
-  // } else {
-  //   console.error('Failed to generate directions between the spaces.');
-  // }
-  function addCircleWithHeight(
-    point: [number, number],
-    radius = 2, // in meters
-    height = 0.5 // height in meters for altitude of the polygon
-  ): Feature<Polygon> {
-    // Generate circle geometry using @turf/circle
-    const geometry = circle(point, radius, { units: "meters" }).geometry;
+  const handler = (event: any) => {
+    const { coordinate } = event;
 
-    // Return the polygon feature with specified height and color
-    return {
-      type: "Feature",
-      geometry,
-      properties: {
-        height: height, // Set the height of the polygon
-      },
-    } as Feature<Polygon>;
+    if (coordinate) {
+      console.log('Full Coordinate Object:', coordinate);
+    } else {
+      console.error('No coordinate information available in the event.');
+    }
+  };
+  mapView.on('click', handler);
+
+  if (!firstSpace || !secondSpace) {
+    console.error('One or both spaces are missing.');
+    return;
   }
 
-  const zones: TDirectionZone[] = [];
+  const directions = mapData.getDirections(coordinatee, firstSpace);
 
-  mapView.on("click", async (event) => {
-    if (!event) return;
-
-    const center: [number, number] = [
-      event.coordinate.longitude,
-      event.coordinate.latitude,
-    ];
-    // const center: [number, number] = [43.486884871599905,-80.5927221896818];
-
-    // On left click, add an orange circle that should be avoided if possible.
-    if (event.pointerEvent.button === 0) {
-      // Specify a radius and height for the circle
-      const polygon = addCircleWithHeight(center, 3, 0.5); // Example radius: 3 meters, height: 0.5 meters
-
-      // Add the polygon to the map
-      mapView.Shapes.add(
-        {
-          type: "FeatureCollection",
-          features: [polygon],
-        },
-        {
-          color: "orange",
-          altitude: polygon.properties.height,
-          height: polygon.properties.height,
-          opacity: 0.3,
-        },
-        mapView.currentFloor
-      );
-
-      // Push the polygon into the zones array (to be avoided)
-      zones.push({
-        geometry: polygon,
-        cost: Infinity, // Set high cost (infinity) to avoid the area entirely
-        floor: mapView.currentFloor,
-      });
-      console.log("We are event Coordinates" ,event.coordinate)
-
-      // Add an "Avoid" marker
-      mapView.Markers.add(
-        event.coordinate,
-        `<div class="zone avoid">avoid</div>`,
-        {
-          rank: "always-visible",
-        }
-      );
-    }
-  });
-
-  mapView.on('click', async (event) => {
-    const clickedLocationc = event.coordinate;
-    console.log(clickedLocationc);
-
-    const clickedLocation = mapData.getByType('space').find((s) => s.name === 'Library');
-    const destination = mapData.getByType('space').find((s) => s.name === 'Gymnasium');
-
-    if (destination) {
-      // Get new directions considering the updated zones
-      const directions = mapData.getDirections(clickedLocation, destination, { zones });
-
-      if (directions) {
-        // Remove any previous paths
-        mapView.Paths.removeAll();
-
-        // Draw the new directions, avoiding the zones
-        mapView.Navigation.draw(directions, {
-          pathOptions: {
-            nearRadius: 1,
-            farRadius: 1,
-          },
-        });
-      }
-    }
-  });
-
+  if (directions) {
+    const pathOptions1: AddPathOptions = {
+      color: "#FF5733",
+      displayArrowsOnPath: true,
+      animateArrowsOnPath: true,
+    };
+    mapView.Navigation.draw(directions, {
+      pathOptions: pathOptions1,
+    });
+  } else {
+    console.error('Failed to generate directions between the spaces.');
+  }
 
   return (
     <>
@@ -148,7 +108,7 @@ const MyCustomComponent: React.FC<MyCustomComponentProps> = ({ Points }) => {
         ))}
     </>
   );
-}
+};
 
 export default function App() {
   const [Points, setPoints] = useState<string[]>(['', '', '']);
@@ -173,7 +133,6 @@ export default function App() {
         <WayFindingForm Points={Points} setPoints={setPoints} />
         <MyCustomComponent Points={Points} />
       </MapView>
-
     </>
   ) : null;
 }

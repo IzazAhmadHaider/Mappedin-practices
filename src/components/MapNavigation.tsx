@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useMemo, useState } from 'react';
 import { useMap } from '@mappedin/react-sdk';
 import toast from 'react-hot-toast';
@@ -37,6 +36,8 @@ const MapNavigation: React.FC<MapNavigationProps> = ({ destination }) => {
         const nextCoordinate = coordinatesList[nextIndex];
         const newCoordinate = mapView.createCoordinate(nextCoordinate.latitude, nextCoordinate.longitude);
 
+        console.log(currentIndex)
+
         // Draw the path to the next coordinate
         const destinationSpace = mapData.getByType('space').find((s) => s.name === destination);
         if (destinationSpace) {
@@ -64,7 +65,7 @@ const MapNavigation: React.FC<MapNavigationProps> = ({ destination }) => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [coordinatesList, mapView, mapData, destination, isLoopCompleted]);
+  }, [coordinatesList, mapView, mapData, destination, isLoopCompleted, currentIndex]);
 
   return null;
 };

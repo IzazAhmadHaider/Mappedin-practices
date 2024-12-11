@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import {useMap } from '@mappedin/react-sdk';
+import {Label, useMap } from '@mappedin/react-sdk';
 import { useLabels } from '../context/Context'; 
 
 const SpaceLabeling: React.FC = () => {
@@ -14,7 +14,13 @@ const SpaceLabeling: React.FC = () => {
     }
   }, [mapData, setLabels]); 
 
-  return (null);
+  return ( <>
+    {mapData
+      .getByType('space')
+      .map((space) => (
+        <Label key={space.id} target={space.center} text={space.name} />
+      ))}
+  </>);
 };
 
 export default SpaceLabeling;

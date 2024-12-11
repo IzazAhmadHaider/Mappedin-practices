@@ -7,7 +7,6 @@ import {
 } from '@tabler/icons-react';
 import React from 'react';
 
-// Define ComponentState type to ensure consistency
 type ComponentState = {
   WayFindingForm: boolean;
   LiveNavigation: boolean;

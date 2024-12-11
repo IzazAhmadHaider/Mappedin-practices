@@ -10,6 +10,7 @@ import MultiDirectionRouting from './components/MultiDirectionRouting';
 import SingleDirectionalWay from './components/SingleDirectionalWay';
 import MarkerOnClick from './components/Interactivity';
 import CameraControls from './components/CameraControls';
+import { LabelProvider } from './context/Context';
 
 type ComponentState = {
   WayFindingForm: boolean;
@@ -60,13 +61,14 @@ export default function App() {
 
   return mapData ? (
     <>
+    <LabelProvider>
       <Toaster position="bottom-center" reverseOrder={false} />
       <MapView
         className="relative"
         mapData={mapData}
         onLoad={(view) => setMapView(view)} // Capture the mapView instance
       >
-        <div className="flex space-x-1 z-50 absolute top-4 left-4 p-4">
+        <div className="flex space-x-1 absolute top-4 left-4 p-4">
           <SideBar ToggleComponents={ToggleComponents} componentToOpen={componentToOpen} />
           {componentToOpen.WayFindingForm && <SingleDirectionalWay />}
           {componentToOpen.LiveNavigation && <MapNavigation destination="Library" />}
@@ -77,6 +79,7 @@ export default function App() {
         {/* Render CameraControls component and pass mapView */}
         {mapView && <CameraControls mapView={mapView} />}
       </MapView>
+      </LabelProvider>
     </>
   ) : null;
 }

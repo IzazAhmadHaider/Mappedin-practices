@@ -8,7 +8,7 @@ import WayFindingForm from './WayFindingForm';
 const MultiDirectionRouting: React.FC = () => {
     const [Points, setPoints] = useState<string[]>(['', '', '']);
     const { mapData, mapView } = useMap();
-    const zones: TDirectionZone[] = []; // Define zones for restricted areas (optional)
+    const zones: TDirectionZone[] = []; 
 
     useEffect(() => {
         const findMultiDestinationDirections = () => {

@@ -56,9 +56,9 @@ const CameraControls: React.FC<CameraControlsProps> = ({ mapView }) => {
           className="border-[1.5px] p-1 rounded-lg cursor-pointer"
           onClick={() => handleControlClick('pitch-up')}
         />
-        <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Pitch Up
-        </span>
+        </span> */}
       </div>
       <div className="group relative flex items-center">
         <IconRotate360
@@ -66,9 +66,9 @@ const CameraControls: React.FC<CameraControlsProps> = ({ mapView }) => {
           className="border-[1.5px] p-1 rounded-lg cursor-pointer rotate-90"
           onClick={() => handleControlClick('pitch-down')}
         />
-        <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Pitch Down
-        </span>
+        </span> */}
       </div>
       <div className="group relative flex items-center">
         <IconArrowBackUp
@@ -76,9 +76,9 @@ const CameraControls: React.FC<CameraControlsProps> = ({ mapView }) => {
           className="border-[1.5px] p-1 rounded-lg cursor-pointer"
           onClick={() => handleControlClick('bearing-left')}
         />
-        <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Bearing Left
-        </span>
+        </span> */}
       </div>
       <div className="group relative flex items-center">
         <IconArrowForwardUp
@@ -86,9 +86,9 @@ const CameraControls: React.FC<CameraControlsProps> = ({ mapView }) => {
           className="border-[1.5px] p-1 rounded-lg cursor-pointer"
           onClick={() => handleControlClick('bearing-right')}
         />
-        <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Bearing Right
-        </span>
+        </span> */}
       </div>
       <div className="group relative flex items-center">
         <IconZoomInArea
@@ -96,9 +96,9 @@ const CameraControls: React.FC<CameraControlsProps> = ({ mapView }) => {
           className="border-[1.5px] p-1 rounded-lg cursor-pointer"
           onClick={() => handleControlClick('zoom-in')}
         />
-        <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Zoom In
-        </span>
+        </span> */}
       </div>
       <div className="group relative flex items-center">
         <IconZoomOutArea
@@ -106,9 +106,9 @@ const CameraControls: React.FC<CameraControlsProps> = ({ mapView }) => {
           className="border-[1.5px] p-1 rounded-lg cursor-pointer"
           onClick={() => handleControlClick('zoom-out')}
         />
-        <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <span className="absolute min-w-[150px] rounded-xl p-2 bg-white right-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Zoom Out
-        </span>
+        </span> */}
       </div>
     </div>
   );

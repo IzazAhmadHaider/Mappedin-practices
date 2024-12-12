@@ -24,27 +24,27 @@ const MarkerOnClick: React.FC = () => {
                             .marker {
                                 display: flex;
                                 align-items: center;
-                                background-color: #fff;
                                 max-height: 64px;
-                                border: 2px solid #293136;
-                                border-radius: 4px;
-                                padding: 4px 12px;
-                                font-weight: bold;
-                                font-family: sans-serif;
-                                color: #ffffff;
-                                background: #293136;
+                            }
+                                
+                            .marker img {
+                                width: 20px; /* Make the image a bit larger for better visibility */
+                                height: 20px;
+                                margin-right: 8px; /* Space between image and text */
+                                border-radius: 50%; /* Circular image */
                             }
                         </style>
                         <div class="marker">
-                            <p>New Marker</p>
+                             <img src="location.png" alt="" />
                         </div>
                     </div>
                 `;
 
-                // Add marker at the clicked position
+                // Add marker at the clicked position with high priority
                 mapView.Markers.add(event.coordinate, markerTemplate, {
                     interactive: true,
                     anchor: 'left',
+                    rank: 'always-visible', // Set marker rank to high
                 });
             }
         };
@@ -62,7 +62,7 @@ const MarkerOnClick: React.FC = () => {
         };
     }, [mapData, mapView]);
 
-    return null
+    return null;
 };
 
 export default MarkerOnClick;

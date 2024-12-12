@@ -2,6 +2,7 @@ import {
   IconMapCode,
   IconMapPin,
   IconMapPins,
+  IconMapPinSearch,
   IconNavigationBolt,
   IconRouteSquare,
 } from '@tabler/icons-react';
@@ -13,6 +14,7 @@ type ComponentState = {
   SpaceLabeling: boolean;
   MultiDirectionRouting: boolean;
   MarkerOnClick: boolean;
+  IconMapPinSearch: boolean;
 };
 
 // Define props for the SideBar component
@@ -25,6 +27,18 @@ const SideBar: React.FC<SideBarProps> = ({ ToggleComponents, componentToOpen }) 
 
   return (
     <div className="h-fit flex flex-col space-y-2 shadow-2xl bg-white rounded-lg p-5">
+      <div className="group relative flex items-center space-x-2">
+        <IconMapPinSearch
+          color={`${(componentToOpen.IconMapPinSearch) ? '#3b82f6' : '#000'}`}
+          size={30}
+          className={`border-[1.5px] p-1 rounded-lg cursor-pointer ${(componentToOpen.IconMapPinSearch) && 'border-blue-500'
+            }`}
+          onClick={() => ToggleComponents('IconMapPinSearch')}
+        />
+        <span className="absolute min-w-[150px] rounded-xl p-2 ml-10 bg-white left-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          Way Finding Form
+        </span>
+      </div>
       <div className="group relative flex items-center space-x-2">
         <IconRouteSquare
           color={`${(componentToOpen.WayFindingForm) ? '#3b82f6' : '#000'}`}

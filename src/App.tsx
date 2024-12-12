@@ -10,6 +10,7 @@ import MultiDirectionRouting from './components/MultiDirectionRouting';
 import SingleDirectionalWay from './components/SingleDirectionalWay';
 import MarkerOnClick from './components/Interactivity';
 import CameraControls from './components/CameraControls';
+import SearchAndMark from './components/SearchAndMark';
 import { LabelProvider } from './context/Context';
 
 type ComponentState = {
@@ -18,6 +19,7 @@ type ComponentState = {
   SpaceLabeling: boolean;
   MultiDirectionRouting: boolean;
   MarkerOnClick: boolean;
+  IconMapPinSearch: boolean;
 };
 
 export default function App() {
@@ -27,23 +29,31 @@ export default function App() {
     SpaceLabeling: true,
     MultiDirectionRouting: false,
     MarkerOnClick: false,
+   IconMapPinSearch: false,
   });
 
   const [mapView, setMapView] = useState<any>(null); // State to store mapView instance
 
   const ToggleComponents = (name: keyof ComponentState) => {
     setComponentToOpen((prevState) => {
-      const updatedState: ComponentState = {} as ComponentState;
-
+      const updatedState: ComponentState = { ...prevState }; // Start with the previous state
+  
       for (const key in prevState) {
-        // Toggle the matching key; leave others unchanged
-        updatedState[key as keyof ComponentState] =
-          key === name ? !prevState[key as keyof ComponentState] : prevState[key as keyof ComponentState];
+        // Preserve the state of SpaceLabeling
+        if (key === 'SpaceLabeling') {
+          updatedState[key as keyof ComponentState] = prevState[key as keyof ComponentState];
+        } else {
+          // Toggle the target component and set others to false
+          updatedState[key as keyof ComponentState] =
+            key === name ? !prevState[key as keyof ComponentState] : false;
+        }
       }
-
+  
       return updatedState;
     });
   };
+  
+  
 
   const { isLoading, error, mapData } = useMapData({
     key: 'mik_yeBk0Vf0nNJtpesfu560e07e5',
@@ -75,6 +85,7 @@ export default function App() {
           {componentToOpen.SpaceLabeling && <SpaceLabeling />}
           {componentToOpen.MultiDirectionRouting && <MultiDirectionRouting />}
           {componentToOpen.MarkerOnClick && <MarkerOnClick />}
+          {componentToOpen.IconMapPinSearch && <SearchAndMark mapView={mapView} mapData={mapData} />}
         </div>
         {/* Render CameraControls component and pass mapView */}
         {mapView && <CameraControls mapView={mapView} />}

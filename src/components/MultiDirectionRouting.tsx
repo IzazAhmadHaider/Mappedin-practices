@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Path, useMap } from '@mappedin/react-sdk';
+import { useMap } from '@mappedin/react-sdk';
 import { TDirectionZone } from '@mappedin/react-sdk/mappedin-js/src';
 import WayFindingForm from './WayFindingForm';
 import '@mappedin/react-sdk/lib/esm/index.css';
@@ -48,13 +48,13 @@ const MultiDirectionRouting: React.FC = () => {
             // Visualize the directions on the map
             mapView.Navigation.draw(directions, {
                 pathOptions: {
-                    color: "#FF5733",
+                    color: "#FEE440",
                     displayArrowsOnPath: true,
                     animateArrowsOnPath: true,
                 },
                 markerOptions: {
-                    departureColor: '#9033ff',
-                    destinationColor: '#FFFFFF',
+                    departureColor: '#00BBF9',
+                    destinationColor: '#F15BB5',
                 },
             });
         };

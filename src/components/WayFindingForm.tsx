@@ -52,7 +52,7 @@ const WayFindingForm: React.FC<WayFindingFormProps> = ({ setPoints, component })
   }
 
   return (
-    <div className="bg-white w-80 z-50 shadow-lg rounded-lg p-5 max-md:w-[50vw]">
+    <div className="bg-white w-80 z-50 shadow-lg rounded-lg p-5 max-sm:w-[70vw]">
       <h2 className="text-xl font-semibold mb-4">Find Your Direction</h2>
       <form className="space-y-3" autoComplete="off" onSubmit={handleFormSubmit}>
         {/* Starting Point */}

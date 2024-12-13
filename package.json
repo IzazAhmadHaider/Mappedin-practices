@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mappedin/mappedin-js": "^5.45.0",
-    "@mappedin/react-sdk": "^6.0.1-beta.15",
+    "@mappedin/mappedin-js": "^5.45.1",
+    "@mappedin/react-sdk": "^6.0.1-beta.18",
     "@tabler/icons-react": "^3.24.0",
     "@turf/circle": "^7.1.0",
     "@turf/helpers": "^7.1.0",

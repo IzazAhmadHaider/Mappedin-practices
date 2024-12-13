@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useMap } from '@mappedin/react-sdk';
+import { Path, useMap } from '@mappedin/react-sdk';
 import { TDirectionZone } from '@mappedin/react-sdk/mappedin-js/src';
 import WayFindingForm from './WayFindingForm';
+import '@mappedin/react-sdk/lib/esm/index.css';
 
 
 
 const MultiDirectionRouting: React.FC = () => {
     const [Points, setPoints] = useState<string[]>(['', '', '']);
     const { mapData, mapView } = useMap();
-    const zones: TDirectionZone[] = []; 
+    const zones: TDirectionZone[] = [];
 
     useEffect(() => {
         const findMultiDestinationDirections = () => {
@@ -25,11 +26,11 @@ const MultiDirectionRouting: React.FC = () => {
                 console.error(`Departure point "${departureName}" not found.`);
                 return;
             }
-
+            
             const destinations = destinationNames
-                .map((name) => mapData.getByType("space").find((s) => s.name === name))
-                .filter((destination) => destination !== undefined);
-
+            .map((name) => mapData.getByType("space").find((s) => s.name === name))
+            .filter((destination) => destination !== undefined);
+            
             if (destinations.length === 0) {
                 console.error("No valid destinations found.");
                 return;
@@ -50,6 +51,10 @@ const MultiDirectionRouting: React.FC = () => {
                     color: "#FF5733",
                     displayArrowsOnPath: true,
                     animateArrowsOnPath: true,
+                },
+                markerOptions: {
+                    departureColor: '#9033ff',
+                    destinationColor: '#FFFFFF',
                 },
             });
         };

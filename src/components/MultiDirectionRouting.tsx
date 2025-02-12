@@ -19,16 +19,24 @@ const MultiDirectionRouting: React.FC = () => {
             }
 
             // Extract the departure point and destinations
+            // const allPOIs = mapData.getByType("point-of-interest");
+            // const targetPOIs = po
+            // .map(id => allPOIs.find((poi: { id: string }) => poi.id === id.trim()))
+            // .filter(Boolean);
             const [departureName, ...destinationNames] = Points;
 
-            const departure = mapData.getByType("space").find((s) => s.name === departureName);
+
+            const POIS = mapData.getByType("point-of-interest");
+            console.log(POIS)
+
+            const departure = mapData.getByType("space").find((s) => s.id === departureName);
             if (!departure) {
                 console.error(`Departure point "${departureName}" not found.`);
                 return;
             }
             
             const destinations = destinationNames
-            .map((name) => mapData.getByType("space").find((s) => s.name === name))
+            .map((name) => mapData.getByType("space").find((s) => s.id === name))
             .filter((destination) => destination !== undefined);
             
             if (destinations.length === 0) {
@@ -48,13 +56,13 @@ const MultiDirectionRouting: React.FC = () => {
             // Visualize the directions on the map
             mapView.Navigation.draw(directions, {
                 pathOptions: {
-                    color: "#FEE440",
+                    color: "#10E0D7",
                     displayArrowsOnPath: true,
                     animateArrowsOnPath: true,
                 },
                 markerOptions: {
-                    departureColor: '#00BBF9',
-                    destinationColor: '#F15BB5',
+                    departureColor: '#10E0D7',
+                    destinationColor: '#10E0D7',
                 },
             });
         };
@@ -64,7 +72,7 @@ const MultiDirectionRouting: React.FC = () => {
     }, [mapData, mapView, Points]);
 
     return (<>
-        <WayFindingForm Points={Points} setPoints={setPoints} />
+        <WayFindingForm Points={Points} setPoints={setPoints} mapData={mapData}/>
     </>)
 };
 

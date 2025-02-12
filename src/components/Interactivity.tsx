@@ -1,68 +1,86 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMap } from '@mappedin/react-sdk';
 
-const MarkerOnClick: React.FC = () => {
+const MarkerCycle: React.FC = () => {
     const { mapData, mapView } = useMap();
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    // Define the list of coordinates
+    const coordinates = [
+        { id: '1f227d73-cfeb-4c19-a904-6421914b92f0', latitude: 50.105724013864105, longitude: 8.671247942475908 },
+        { id: '17628b8e-bb5f-4bac-ac3d-6e39ec0fa763', latitude: 50.105824013864105, longitude: 8.671347942475908 },
+        { id: '17628b8e-bb5f-4bac-ac3d-6e39ec0fa763', latitude: 50.105424013864105, longitude: 8.621347942475908 },
+        
+    ];
 
     useEffect(() => {
-        const handleMapClick = (event: any) => {
-            if (!mapData || !mapView) {
-                console.error("Map data or view is not available.");
-                return;
-            }
-
-            // Check if there are any markers clicked
-            if (event.markers.length > 0) {
-                console.log("Clicked on marker: " + event.markers[0].id);
-                mapView.Markers.remove(event.markers[0]);
-            } else {
-                // If no marker is clicked, create a new marker at the clicked location
-                const markerTemplate = `
-                    <div>
-                        <style>
-                            .marker {
-                                display: flex;
-                                align-items: center;
-                                max-height: 64px;
-                            }
-                                
-                            .marker img {
-                                width: 20px; /* Make the image a bit larger for better visibility */
-                                height: 20px;
-                                margin-right: 8px; /* Space between image and text */
-                                border-radius: 50%; /* Circular image */
-                            }
-                        </style>
-                        <div class="marker">
-                             <img src="location.png" alt="" />
-                        </div>
-                    </div>
-                `;
-
-                // Add marker at the clicked position with high priority
-                mapView.Markers.add(event.coordinate, markerTemplate, {
-                    interactive: true,
-                    anchor: 'left',
-                    rank: 'always-visible', // Set marker rank to high
-                });
-            }
-        };
-
-        // Attach the click event listener to the map view
-        if (mapView) {
-            mapView.on('click', handleMapClick);
+        if (!mapData || !mapView) {
+            console.error("Map data or view is not available.");
+            return;
         }
 
-        // Clean up the event listener when the component unmounts or when mapView changes
-        return () => {
-            if (mapView) {
-                mapView.off('click', handleMapClick);
-            }
+        // Create a MappedinCoordinate for the first location
+        const createMarker = (coordinate: any) => {
+            const markerTemplate = `
+            <div>
+                <style>
+                    .marker {
+                        display: flex;
+                        align-items: center;
+                        max-height: 64px;
+                    }
+                    .marker img {
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 8px;
+                        border-radius: 50%;
+                    }
+                </style>
+                <div class="marker">
+                    <img src="location.png" alt="" />
+                </div>
+            </div>
+            `;
+
+            const mapCoordinate = mapView.createCoordinate(coordinate.latitude, coordinate.longitude);
+
+            // Add the marker at the coordinate
+            mapView.Markers.add(mapCoordinate, markerTemplate, {
+                interactive: true,
+                anchor: 'center',
+                rank: 'always-visible',
+            });
+
+            return mapCoordinate;
         };
-    }, [mapData, mapView]);
+
+        // Create the initial marker at the first coordinate
+        let currentMarker = createMarker(coordinates[currentIndex]);
+
+        // Function to update the marker
+        const updateMarker = () => {
+            // Remove the previous marker
+            mapView.Markers.remove(currentMarker);
+
+            // Set the next marker in the coordinates list
+            const nextIndex = (currentIndex + 1) % coordinates.length;
+            const nextCoordinate = coordinates[nextIndex];
+
+            // Create and add the new marker
+            currentMarker = createMarker(nextCoordinate);
+
+            // Update the current index for the next cycle
+            setCurrentIndex(nextIndex);
+        };
+
+        // Set the interval to update the marker every 2 seconds
+        const intervalId = setInterval(updateMarker, 2000);
+
+        // Cleanup the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, [mapData, mapView, currentIndex]);
 
     return null;
 };
 
-export default MarkerOnClick;
+export default MarkerCycle;

@@ -45,17 +45,17 @@ const MarkerCycle: React.FC = () => {
             const mapCoordinate = mapView.createCoordinate(coordinate.latitude, coordinate.longitude);
 
             // Add the marker at the coordinate
-            mapView.Markers.add(mapCoordinate, markerTemplate, {
+            const marker = mapView.Markers.add(mapCoordinate, markerTemplate, {
                 interactive: true,
                 anchor: 'center',
                 rank: 'always-visible',
             });
 
-            return mapCoordinate;
+            return marker;
         };
 
         // Create the initial marker at the first coordinate
-        let currentMarker = createMarker(coordinates[currentIndex]);
+        let currentMarker: any = createMarker(coordinates[currentIndex]);
 
         // Function to update the marker
         const updateMarker = () => {
